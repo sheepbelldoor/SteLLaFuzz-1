@@ -57,7 +57,8 @@ RUN cd chatafl && \
 COPY --chown=ubuntu:ubuntu stellafuzz stellafuzz
 RUN cd stellafuzz && \
     make clean all $MAKE_OPT && \
-    cd llvm_mode && make $MAKE_OPT
+    cd llvm_mode && make $MAKE_OPT && \
+    pip install -r stellafuzz-multiagent/requirements.txt
 
     # Set up environment variables for AFLNet
 ENV WORKDIR="/home/ubuntu/experiments"
