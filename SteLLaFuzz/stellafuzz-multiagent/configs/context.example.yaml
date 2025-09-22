@@ -1,0 +1,8 @@
+inputs:
+  spec_path: "./data/rfc/example.txt"
+  pcap_path: "./data/pcaps/sample.pcap"
+  proto_name: "PROTOX"
+  msg_type: "MSG_DATA"
+  target_cmd: "./target_bin @@"
+baseline:
+  coverage: {edges: 0, state: []}

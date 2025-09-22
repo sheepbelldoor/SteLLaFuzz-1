@@ -105,7 +105,8 @@ EXP_ST u8 *in_dir,                    /* Input directory with test cases  */
           *in_bitmap,                 /* Input bitmap                     */
           *doc_path,                  /* Path to documentation dir        */
           *target_path,               /* Path to target binary            */
-          *orig_cmdline;              /* Original command line            */
+          *orig_cmdline,              /* Original command line            */
+          *target_program;            /* Program name to be fuzzed        */
 
 EXP_ST u32 exec_tmout = EXEC_TIMEOUT; /* Configurable exec timeout (ms)   */
 static u32 hang_tmout = EXEC_TIMEOUT; /* Timeout used for hang det (ms)   */
@@ -392,6 +393,7 @@ u8 state_aware_mode = 0;
 u8 region_level_mutation = 0;
 u8 state_selection_algo = ROUND_ROBIN, seed_selection_algo = RANDOM_SELECTION;
 u8 false_negative_reduction = 0;
+u8 target_selected = 0;
 
 /* Implemented state machine */
 Agraph_t  *ipsm;
@@ -8105,6 +8107,9 @@ static void usage(u8* argv0) {
        "  -i dir        - input directory with test cases\n"
        "  -o dir        - output directory for fuzzer findings\n\n"
 
+       "Settings for SteLLaFuzz:\n\n"
+      "   -p name        - target program name\n"
+
        "Execution control settings:\n\n"
 
        "  -f file       - location read by the fuzzed program (stdin)\n"
@@ -8857,7 +8862,7 @@ int main(int argc, char** argv) {
   gettimeofday(&tv, &tz);
   srandom(tv.tv_sec ^ tv.tv_usec ^ getpid());
 
-  while ((opt = getopt(argc, argv, "+i:o:f:m:t:T:dnCB:S:M:x:QN:D:W:w:e:P:KEq:s:RFc:l:")) > 0)
+  while ((opt = getopt(argc, argv, "+i:o:f:m:t:T:dnCB:S:M:x:QN:D:W:w:e:P:KEq:s:RFc:l:p:")) > 0)
 
     switch (opt) {
 
@@ -9146,6 +9151,12 @@ int main(int argc, char** argv) {
 	      if (local_port < 1024 || local_port > 65535) FATAL("Invalid source port number");
         break;
 
+      case 'p': /* target program name */
+        if (target_selected) FATAL("Multiple -p options not supported");
+        target_program = optarg;
+        target_selected = 1;
+        break;
+
       default:
 
         usage(argv[0]);
@@ -9246,6 +9257,17 @@ int main(int argc, char** argv) {
     use_argv = get_qemu_argv(argv[0], argv + optind, argc - optind);
   else
     use_argv = argv + optind;
+
+  // perform SteLLaFuzz seed generation
+  if (target_selected) {
+    u8 *cmd = alloc_printf("python3 stellafuzz-multiagent/main.py --target %s --seed_dir %s",
+                           target_program ? target_program : "", in_dir ? in_dir : "");
+    int result = system(cmd);
+    ck_free(cmd);
+  }
+  else {
+    FATAL("No target program is specified. Stop running afl-fuzz without SteLLaFuzz seed generation.");
+  }
 
   perform_dry_run(use_argv);
 

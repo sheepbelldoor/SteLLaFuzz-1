@@ -1,0 +1,8 @@
+# main.py에서 여기에 정의된 순서대로 pipeline을 진행
+context: "configs/context.example.yaml"
+steps:
+  - agent: "agents.protocol_analyst"
+  - agent: "agents.sequence_designer"
+  - agent: "agents.message_designer"
+  - agent: "agents.seed_developer"
+  - agent: "agents.tester"
