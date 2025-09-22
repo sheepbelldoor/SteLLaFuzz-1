@@ -23,11 +23,6 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   fi
 
   #Step-1. Do Fuzzing
-  if [ $FUZZER = "stellafuzz" ]; then
-    pip install pydantic openai
-    cd ${WORKDIR}
-    python3 stellafuzz.py -o ${WORKDIR}/in-rtsp -p RTSP -s ${WORKDIR}/in-rtsp
-  fi
   #Move to fuzzing folder
   cd $WORKDIR/${TARGET_DIR}/testProgs
   timeout -k 2s --preserve-status $TIMEOUT /home/ubuntu/${FUZZER}/afl-fuzz -d -i ${INPUTS} -x ${WORKDIR}/rtsp.dict -o $OUTDIR -N tcp://127.0.0.1/8554 $OPTIONS ./testOnDemandRTSPServer 8554
@@ -59,14 +54,10 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   mkdir ${WORKDIR}/${TARGET_DIR}/testProgs/${OUTDIR}/cov_html/
   cp *.html ${WORKDIR}/live/testProgs/${OUTDIR}/cov_html/
 
-  if [ $FUZZER = "chatafl" ]; then
-    cp -r ${WORKDIR}/answers ${WORKDIR}/${TARGET_DIR}/live/testProgs/${OUTDIR}/answers/
-  fi
-
-  if [ $FUZZER = "stellafuzz" ]; then
-    cp -r ${WORKDIR}/in-rtsp ${WORKDIR}/live/testProgs/${OUTDIR}/in-rtsp/
-    cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/live/testProgs/${OUTDIR}/llm_outputs/
-  fi
+  # if [ $FUZZER = "stellafuzz" ]; then
+  #   cp -r ${WORKDIR}/in-rtsp ${WORKDIR}/live/testProgs/${OUTDIR}/in-rtsp/
+  #   cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/live/testProgs/${OUTDIR}/llm_outputs/
+  # fi
 
   #Step-3. Save the result to the ${WORKDIR} folder
   #Tar all results to a file

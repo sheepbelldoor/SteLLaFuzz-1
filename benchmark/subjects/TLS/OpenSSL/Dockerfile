@@ -107,6 +107,3 @@ COPY --chown=ubuntu:ubuntu in-tls ${WORKDIR}/in-tls
 COPY --chown=ubuntu:ubuntu tls.dict ${WORKDIR}/tls.dict
 COPY --chown=ubuntu:ubuntu cov_script.sh ${WORKDIR}/cov_script
 COPY --chown=ubuntu:ubuntu run.sh ${WORKDIR}/run
-COPY --chown=ubuntu:ubuntu stellafuzz.py ${WORKDIR}/stellafuzz.py
-COPY --chown=ubuntu:ubuntu LLM ${WORKDIR}/LLM
-COPY --chown=ubuntu:ubuntu utility ${WORKDIR}/utility

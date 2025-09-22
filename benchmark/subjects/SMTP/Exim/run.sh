@@ -23,10 +23,6 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   fi
 
   #Step-1. Do Fuzzing
-  if [ $FUZZER = "stellafuzz" ]; then
-    pip install pydantic openai
-    python3 stellafuzz.py -o ${WORKDIR}/in-smtp -p SMTP -s ${WORKDIR}/in-smtp
-  fi
   #Move to fuzzing folder
   cd $WORKDIR/${TARGET_DIR}
   cp ./src/build-Linux-x86_64/exim /usr/exim/bin/exim
@@ -56,14 +52,10 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   mkdir ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/cov_html/
   cp *.html ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/cov_html/
 
-  if [ $FUZZER = "chatafl" ]; then
-    cp -r ${WORKDIR}/answers ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/answers/
-  fi
-
-  if [ $FUZZER = "stellafuzz" ]; then
-    cp -r ${WORKDIR}/in-smtp ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/in-smtp/
-    cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/llm_outputs/
-  fi
+  # if [ $FUZZER = "stellafuzz" ]; then
+  #   cp -r ${WORKDIR}/in-smtp ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/in-smtp/
+  #   cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/llm_outputs/
+  # fi
 
   #Step-4. Save the result to the ${WORKDIR} folder
   #Tar all results to a file

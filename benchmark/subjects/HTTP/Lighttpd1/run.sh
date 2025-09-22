@@ -23,11 +23,6 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   fi
 
   #Step-1. Do Fuzzing
-  if [ $FUZZER = "stellafuzz" ]; then
-    pip install pydantic openai
-    cd ${WORKDIR}
-    python3 stellafuzz.py -o ${WORKDIR}/in-http -p HTTP -s ${WORKDIR}/in-http
-  fi
   #Move to fuzzing folder
   cd $WORKDIR/${TARGET_DIR}/
   timeout -k 2s --preserve-status $TIMEOUT /home/ubuntu/${FUZZER}/afl-fuzz -d -i ${INPUTS} -x ${WORKDIR}/http.dict -o $OUTDIR -N tcp://127.0.0.1/8080 $OPTIONS ./src/lighttpd -D -f ${WORKDIR}/lighttpd.conf -m $PWD/src/.libs
@@ -54,14 +49,10 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   mkdir ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/cov_html/
   cp *.html ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/cov_html/
 
-  if [ $FUZZER = "chatafl" ]; then
-    cp -r ${WORKDIR}/answers ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/answers/
-  fi
-
-  if [ $FUZZER = "stellafuzz" ]; then
-    cp -r ${WORKDIR}/in-http ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/in-http/
-    cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/llm_outputs/
-  fi
+  # if [ $FUZZER = "stellafuzz" ]; then
+  #   cp -r ${WORKDIR}/in-http ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/in-http/
+  #   cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/llm_outputs/
+  # fi
 
 
   #Step-3. Save the result to the ${WORKDIR} folder

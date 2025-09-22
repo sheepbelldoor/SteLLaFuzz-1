@@ -23,11 +23,6 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   INPUTS=${INPUTS:-${WORKDIR}"/in-sip"}
 
   #Step-1. Do Fuzzing
-  if [ $FUZZER = "stellafuzz" ]; then
-    pip install pydantic openai
-    cd ${WORKDIR}
-    python3 stellafuzz.py -o ${WORKDIR}/in-sip -p SIP -s ${WORKDIR}/in-sip
-  fi
   #Move to fuzzing folder
   export KAMAILIO_MODULES="src/modules"
   export KAMAILIO_RUNTIME_DIR="runtime_dir"
@@ -54,14 +49,10 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   mkdir ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/cov_html/
   cp *.html ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/cov_html/
 
-  if [ $FUZZER = "chatafl" ]; then
-    cp -r ${WORKDIR}/answers ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/answers/
-  fi
-  
-  if [ $FUZZER = "stellafuzz" ]; then
-    cp -r ${WORKDIR}/in-sip ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/in-sip/
-    cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/llm_outputs/
-  fi
+  # if [ $FUZZER = "stellafuzz" ]; then
+  #   cp -r ${WORKDIR}/in-sip ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/in-sip/
+  #   cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/${OUTDIR}/llm_outputs/
+  # fi
 
   #Step-3. Save the result to the ${WORKDIR} folder
   #Tar all results to a file

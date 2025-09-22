@@ -23,11 +23,6 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   INPUTS=${INPUTS:-${WORKDIR}"/in-dns"}
 
   #Step-1. Do Fuzzing
-  if [ $FUZZER = "stellafuzz" ]; then
-    pip install pydantic openai
-    cd ${WORKDIR}
-    python3 stellafuzz.py -o ${WORKDIR}/in-dns -p DNS -s ${WORKDIR}/in-dns
-  fi
   #Move to fuzzing folder
   cd $WORKDIR/${TARGET_DIR}/src
   timeout -k 2s --preserve-status $TIMEOUT /home/ubuntu/${FUZZER}/afl-fuzz -d -i ${INPUTS} -o $OUTDIR -N udp://127.0.0.1/5353 $OPTIONS ./dnsmasq
@@ -51,14 +46,10 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   mkdir ${WORKDIR}/${TARGET_DIR}/src/${OUTDIR}/cov_html/
   cp *.html ${WORKDIR}/${TARGET_DIR}/src/${OUTDIR}/cov_html/
 
-  if [ $FUZZER = "chatafl" ]; then
-    cp -r ${WORKDIR}/answers ${WORKDIR}/${TARGET_DIR}/src/${OUTDIR}/answers/
-  fi
-
-  if [ $FUZZER = "stellafuzz" ]; then
-    cp -r ${WORKDIR}/in-dns ${WORKDIR}/${TARGET_DIR}/src/${OUTDIR}/in-dns/
-    cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/src/${OUTDIR}/llm_outputs/
-  fi
+  # if [ $FUZZER = "stellafuzz" ]; then
+  #   cp -r ${WORKDIR}/in-dns ${WORKDIR}/${TARGET_DIR}/src/${OUTDIR}/in-dns/
+  #   cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/src/${OUTDIR}/llm_outputs/
+  # fi
 
   #Step-3. Save the result to the ${WORKDIR} folder
   #Tar all results to a file

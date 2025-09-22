@@ -23,11 +23,6 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   INPUTS=${INPUTS:-"${WORKDIR}/in-ftp"}
 
   #Step-1. Do Fuzzing
-  if [ $FUZZER = "stellafuzz" ]; then
-    pip install pydantic openai
-    cd ${WORKDIR}
-    python3 stellafuzz.py -o ${WORKDIR}/in-ftp -p FTP -s ${WORKDIR}/in-ftp
-  fi
   #Move to fuzzing folder
   cd $WORKDIR/${TARGET_DIR}/Source/Release
   echo "$WORKDIR/${TARGET_DIR}/Source/Release"
@@ -52,14 +47,10 @@ if $(strstr $FUZZER "afl") || $(strstr $FUZZER "llm") || $(strstr $FUZZER "stell
   mkdir ${WORKDIR}/${TARGET_DIR}/Source/Release/${OUTDIR}/cov_html/
   cp *.html ${WORKDIR}/${TARGET_DIR}/Source/Release/${OUTDIR}/cov_html/
 
-  if [ $FUZZER = "chatafl" ]; then
-    cp -r ${WORKDIR}/answers ${WORKDIR}/${TARGET_DIR}/Source/Release/${OUTDIR}/answers/
-  fi
-
-  if [ $FUZZER = "stellafuzz" ]; then
-    cp -r ${WORKDIR}/in-ftp ${WORKDIR}/${TARGET_DIR}/Source/Release/${OUTDIR}/in-ftp/
-    cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/Source/Release/${OUTDIR}/llm_outputs/
-  fi
+  # if [ $FUZZER = "stellafuzz" ]; then
+  #   cp -r ${WORKDIR}/in-ftp ${WORKDIR}/${TARGET_DIR}/Source/Release/${OUTDIR}/in-ftp/
+  #   cp -r ${WORKDIR}/llm_outputs ${WORKDIR}/${TARGET_DIR}/Source/Release/${OUTDIR}/llm_outputs/
+  # fi
 
   #Step-3. Save the result to the ${WORKDIR} folder
   #Tar all results to a file

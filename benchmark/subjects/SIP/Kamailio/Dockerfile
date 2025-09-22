@@ -117,6 +117,3 @@ COPY --chown=ubuntu:ubuntu run.sh ${WORKDIR}/run
 COPY --chown=ubuntu:ubuntu run_pjsip.sh ${WORKDIR}/run_pjsip
 COPY --chown=ubuntu:ubuntu kamailio-basic.cfg ${WORKDIR}/kamailio-basic.cfg
 COPY --chown=ubuntu:ubuntu StarWars3.wav ${WORKDIR}/StarWars3.wav
-COPY --chown=ubuntu:ubuntu stellafuzz.py ${WORKDIR}/stellafuzz.py
-COPY --chown=ubuntu:ubuntu LLM ${WORKDIR}/LLM
-COPY --chown=ubuntu:ubuntu utility ${WORKDIR}/utility

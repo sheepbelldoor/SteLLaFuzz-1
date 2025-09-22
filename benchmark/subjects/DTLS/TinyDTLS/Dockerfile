@@ -101,6 +101,3 @@ RUN cd $WORKDIR && \
 COPY --chown=ubuntu:ubuntu in-dtls ${WORKDIR}/in-dtls
 COPY --chown=ubuntu:ubuntu cov_script.sh ${WORKDIR}/cov_script
 COPY --chown=ubuntu:ubuntu run.sh ${WORKDIR}/run
-COPY --chown=ubuntu:ubuntu stellafuzz.py ${WORKDIR}/stellafuzz.py
-COPY --chown=ubuntu:ubuntu utility ${WORKDIR}/utility
-COPY --chown=ubuntu:ubuntu LLM ${WORKDIR}/LLM
